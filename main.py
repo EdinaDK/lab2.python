@@ -1,57 +1,65 @@
 class Pagination:
-    def __init__(self, items=[], pageSize = 10, flag=0):
+
+    def __init__(self, items=[], pageSize = 0, tag = 0):
         self.items = items
         self.pageSize = pageSize
-        self.flag = flag
+        self.tag = tag
 
-    def GetVisibleItems(self):
-        a = self.items[self.flag * pageSize: self.flag * self.pageSize + self.pageSize]
-        return a
-
-    def NextPage(self):
-        self.flag += 1
-        return self
-
+    # Предыдущая страница
     def PrevPage(self):
-        self.flag -= 1
+        self.tag -= 1
         return self
 
-    def GotoPage(self):
-        print("Input")
-        w = float(input())
-        count = int(w)
-        if count > len(self.items) / self.pageSize:
-            self.LastPage(_lst, self.pageSize)
-        else:
-            self.flag = self.pageSize * (count - 1)
-
-
+    # Следующая страница
+    def NextPage(self):
+        self.tag += 1
         return self
 
+    # Первая страница
     def FirstPage(self):
-        self.flag = 0
+        self.tag = 0
         return self
 
+    # Последняя страница
     def LastPage(self, items, pageSize):
-        self.flag = int(len(self.items) / pageSize)
-        if self.flag * pageSize == len(self.items):
-            self.flag -= 1
+        self.tag = int(len(self.items) / pageSize)
+        if self.tag * pageSize == len(self.items):
+            self.tag -= 1
         return self
 
-print("Input pagesize")
-q = float(input())
-pageSize = int(q)
-print(pageSize)
+    # Переход на страницу
+    def GoToPage(self):
+        print("Enter number: ")
+        a = input()
+        count = int(a)
+        if count > len(self.items) / self.pageSize: # если введенный номер страницы больше максимальной
+            self.LastPage(_lst, self.pageSize)      # выводим последнюю страницу
+        else:
+            self.tag = self.pageSize * (count - 1)
+        return self
+
+    # Получить видимые элементы
+    def GetVisibleItems(self):
+        n = self.items[self.tag * pageSize: self.tag * self.pageSize + self.pageSize]
+        return n
+
+
+m = float(input())
+pageSize = int(m)
+print("pageSize = ", pageSize)
 
 alphabetList = "abcdefghijklmnopqrstuvwxyz"
+p = Pagination(alphabetList, pageSize)
+print("alphabet = ", alphabetList)
 _lst = list(alphabetList)
-print(_lst)
-p = Pagination(alphabetList, pageSize, 0)
 
-data_output = p.GetVisibleItems()
+print("first page = ", p.GetVisibleItems())
 
-print(data_output)
 p.NextPage()
-print(p.GetVisibleItems())
-p.GotoPage()
-print(p.GetVisibleItems())
+print("next page = ", p.GetVisibleItems())
+
+p.LastPage(alphabetList, pageSize)
+print("last page = ", p.GetVisibleItems())
+
+p.GoToPage()
+print("go to page = ", p.GetVisibleItems())
